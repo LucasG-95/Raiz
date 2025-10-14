@@ -1974,3 +1974,102 @@ button[type="submit"]:focus {
   outline: none !important;
   box-shadow: none !important;
 }
+/* ===== HERO: transiciones de imágenes + animación de texto ===== */
+
+/* Suaviza crossfade y añade leve zoom-out */
+.hero .carousel-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transform: scale(1.04);
+  transition: opacity 1s ease, transform 6s ease;
+}
+.hero .carousel-item.active img {
+  transform: scale(1.0);
+}
+
+/* Fondo translúcido suave detrás del texto */
+.hero .hero-caption {
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(2px);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  display: inline-block;
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+/* Estilo de textos */
+.hero .hero-caption h2 {
+  font-family: var(--font-primary);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #162316;
+  margin-bottom: 1.2rem;
+}
+
+.hero .hero-caption p {
+  font-family: var(--font-secondary);
+  color: #162316;
+  font-weight: 400;
+  font-size: 1.25rem; /* agrandado +2–3pt aprox */
+  line-height: 1.6;
+  margin-bottom: 1.8rem;
+}
+
+/* Animaciones de entrada (fade + leve subida) */
+.hero .hero-caption h2,
+.hero .hero-caption p,
+.hero .hero-caption .btn-get-started {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.hero .carousel-item.active .hero-caption h2 {
+  animation: rbFadeUp 0.6s ease-out 0.15s both;
+}
+.hero .carousel-item.active .hero-caption p {
+  animation: rbFadeUp 0.6s ease-out 0.35s both;
+}
+.hero .carousel-item.active .hero-caption .btn-get-started {
+  animation: rbFadeUp 0.6s ease-out 0.55s both;
+}
+
+@keyframes rbFadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Botón principal del hero */
+.hero .btn-get-started {
+  background: #28830A;
+  border: none;
+  color: #fff;
+  padding: 0.7rem 1.8rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+.hero .btn-get-started:hover {
+  background: #1f5e09;
+}
+
+/* Centrado del contenido */
+.hero .carousel-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Respeto de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .hero .carousel-item img { transition: none; transform: none; }
+  .hero .hero-caption h2,
+  .hero .hero-caption p,
+  .hero .hero-caption .btn-get-started {
+    animation: none !important;
+    opacity: 1; transform: none;
+  }
+}

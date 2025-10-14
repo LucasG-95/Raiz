@@ -1974,102 +1974,299 @@ button[type="submit"]:focus {
   outline: none !important;
   box-shadow: none !important;
 }
-/* ===== HERO: transiciones de imágenes + animación de texto ===== */
+/* ===== HERO — versión compacta y coherente ===== */
 
-/* Suaviza crossfade y añade leve zoom-out */
-.hero .carousel-item img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  transform: scale(1.04);
-  transition: opacity 1s ease, transform 6s ease;
-}
-.hero .carousel-item.active img {
-  transform: scale(1.0);
-}
-
-/* Fondo translúcido suave detrás del texto */
-.hero .hero-caption {
-  background: rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(2px);
-  border-radius: 1rem;
-  padding: 2.5rem;
-  display: inline-block;
-  margin: 0 auto;
-  max-width: 900px;
+/* Capas base + overlay */
+.hero .carousel-item{ position:relative; overflow:hidden; }
+.hero .carousel-item::before{
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background: linear-gradient(to top,
+    #162316 0%,
+    rgba(22,35,22,.75) 30%,
+    rgba(22,35,22,.35) 60%,
+    rgba(22,35,22,0) 100%);
 }
 
-/* Estilo de textos */
-.hero .hero-caption h2 {
-  font-family: var(--font-primary);
-  font-size: 2.6rem;
-  font-weight: 700;
-  color: #162316;
-  margin-bottom: 1.2rem;
+/* Transición de imágenes (crossfade + zoom-out) */
+.hero .carousel-item img{
+  position:relative; z-index:0; width:100%; height:auto; object-fit:cover;
+  transform: scale(1.04); transition: opacity 1s ease, transform 6s ease;
+}
+.hero .carousel-item.active img{ transform: scale(1); }
+
+/* Contenedor de texto (alto para despegar de indicadores) */
+.hero .carousel-container{
+  position:absolute; z-index:3; top:40%; left:50%; transform:translate(-50%,-40%);
+  width:min(92%,1000px); text-align:center; padding:2rem 1.25rem; background:none; backdrop-filter:none;
 }
 
-.hero .hero-caption p {
-  font-family: var(--font-secondary);
-  color: #162316;
-  font-weight: 400;
-  font-size: 1.25rem; /* agrandado +2–3pt aprox */
-  line-height: 1.6;
-  margin-bottom: 1.8rem;
+/* Tipografías y colores (blanco forzado) */
+.hero .carousel-container h2,
+.hero .carousel-container p{ color:#fff !important; }
+.hero .carousel-container h2{ font-family:var(--font-primary); font-weight:700; font-size:2.6rem; margin-bottom:1.1rem; }
+.hero .carousel-container p{  font-family:var(--font-secondary); font-weight:400; font-size:1.25rem; line-height:1.6; margin:0 auto; max-width:900px; }
+
+/* CTA fijo y centrado (permanece entre slides) */
+.hero .hero-fixed-cta{
+  position:absolute; z-index:4; left:50%; transform:translateX(-50%); bottom:76px;
+  background:#28830A !important; color:#fff !important; border:none !important; box-shadow:none !important; outline:none !important;
+  padding:.75rem 1.9rem; border-radius:2rem; font-weight:600; transition:background .2s ease;
+}
+.hero .hero-fixed-cta:hover{ background:#1f5e09 !important; }
+
+/* Indicadores y flechas */
+.carousel-indicators{ z-index:2; bottom:26px; }
+.carousel-indicators [data-bs-target]{ background-color:rgba(255,255,255,.65); }
+.carousel-indicators .active{ background-color:#fff; }
+.carousel-control-prev .carousel-control-prev-icon,
+.carousel-control-next .carousel-control-next-icon{ filter:invert(1) brightness(2); }
+
+/* Animación de entrada (fade + leve subida) */
+.hero .carousel-container h2,
+.hero .carousel-container p{ opacity:0; transform:translateY(10px); }
+.hero .carousel-item.active .carousel-container h2{ animation:rbFadeUp .6s ease-out .15s both; }
+.hero .carousel-item.active .carousel-container p { animation:rbFadeUp .6s ease-out .35s both; }
+@keyframes rbFadeUp{ from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+
+/* Accesibilidad */
+@media (prefers-reduced-motion:reduce){
+  .hero .carousel-item img{ transition:none; transform:none; }
+  .hero .carousel-container h2,
+  .hero .carousel-container p{ animation:none !important; opacity:1; transform:none; }
 }
 
-/* Animaciones de entrada (fade + leve subida) */
-.hero .hero-caption h2,
-.hero .hero-caption p,
-.hero .hero-caption .btn-get-started {
-  opacity: 0;
-  transform: translateY(10px);
+/* Responsivo */
+@media (max-width:992px){
+  .hero .carousel-container{ top:38%; transform:translate(-50%,-38%); }
+  .hero .carousel-container h2{ font-size:2.1rem; }
+  .hero .hero-fixed-cta{ bottom:64px; }
+}
+@media (max-width:576px){
+  .hero .carousel-container{ top:36%; transform:translate(-50%,-36%); }
+  .hero .carousel-container h2{ font-size:1.8rem; }
+  .hero .carousel-container p{ font-size:1.1rem; }
+  .hero .hero-fixed-cta{ bottom:56px; padding:.65rem 1.5rem; }
+}
+/* === Contenedor del hero posicionado para usar coordenadas absolutas */
+#hero { position: relative; }
+
+/* Texto del hero: queda más alto para no chocar con CTA/indicadores */
+.hero .carousel-container{
+  position:absolute; z-index:3;
+  top: 40%; left:50%; transform: translate(-50%, -40%);
+  width: min(92%, 1000px); text-align:center; padding: 2rem 1.25rem;
+  background:none; backdrop-filter:none;
 }
 
-.hero .carousel-item.active .hero-caption h2 {
-  animation: rbFadeUp 0.6s ease-out 0.15s both;
+/* Indicadores del carrusel (anclados abajo) */
+.carousel-indicators{
+  z-index: 2;
+  bottom: 22px;                     /* altura fija de indicadores */
 }
-.hero .carousel-item.active .hero-caption p {
-  animation: rbFadeUp 0.6s ease-out 0.35s both;
-}
-.hero .carousel-item.active .hero-caption .btn-get-started {
-  animation: rbFadeUp 0.6s ease-out 0.55s both;
-}
+.carousel-indicators [data-bs-target]{ background-color: rgba(255,255,255,.65); }
+.carousel-indicators .active{ background-color:#fff; }
 
-@keyframes rbFadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* CTA FIJO – centrado respecto al título y entre texto/indicadores */
+.hero .hero-fixed-cta{
+  position: absolute; z-index: 3;
+  left: 50%; transform: translateX(-50%);
+  bottom: calc(22px + 48px);        /* 48px por encima de los indicadores */
+  background:#28830A !important; color:#fff !important;
+  border:none !important; box-shadow:none !important; outline:none !important;
+  padding:.75rem 1.9rem; border-radius:2rem; font-weight:600;
+  transition: background .2s ease;
 }
+.hero .hero-fixed-cta:hover{ background:#1f5e09 !important; }
 
-/* Botón principal del hero */
-.hero .btn-get-started {
-  background: #28830A;
-  border: none;
-  color: #fff;
-  padding: 0.7rem 1.8rem;
-  border-radius: 2rem;
-  font-weight: 600;
-  transition: background 0.2s ease;
+/* Responsivo: ajustamos espacios para que no se monten en pantallas chicas */
+@media (max-width: 992px){
+  .hero .carousel-container{ top: 38%; transform: translate(-50%, -38%); }
+  .hero .hero-fixed-cta{ bottom: calc(22px + 40px); }  /* un poco más cerca de indicadores */
 }
-.hero .btn-get-started:hover {
-  background: #1f5e09;
-}
-
-/* Centrado del contenido */
-.hero .carousel-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-/* Respeto de accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-  .hero .carousel-item img { transition: none; transform: none; }
-  .hero .hero-caption h2,
-  .hero .hero-caption p,
-  .hero .hero-caption .btn-get-started {
-    animation: none !important;
-    opacity: 1; transform: none;
+@media (max-width: 576px){
+  .hero .carousel-container{ top: 36%; transform: translate(-50%, -36%); }
+  .hero .hero-fixed-cta{
+    bottom: calc(22px + 36px);
+    padding:.65rem 1.5rem;
   }
+}
+/* =========================================================
+   HERO (Raíz) — Zoom IN + blur decreciente + CTA fijo
+   ========================================================= */
+
+/* Ajustes del efecto */
+:root{
+  --hero-zoom-duration: 6s;    /* duración del zoom */
+  --hero-blur-max: 4px;        /* “30%” de blur sutil; podés usar 3–6px */
+}
+
+/* Capas base + overlay verde oscuro desde abajo hacia arriba */
+.hero .carousel-item{ position:relative; overflow:hidden; }
+.hero .carousel-item::before{
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background: linear-gradient(to top,
+    #162316 0%,
+    rgba(22,35,22,.75) 30%,
+    rgba(22,35,22,.35) 60%,
+    rgba(22,35,22,0) 100%);
+}
+
+/* IMAGEN: inicia full (nítida) → zoom-in + blur que AUMENTA */
+:root{
+  --hero-zoom-duration: 6s;    /* ajusta la duración */
+  --hero-blur-max: 4px;        /* ~30% sutil (probar 4–6px) */
+}
+
+.hero .carousel-item img{
+  position: relative; z-index: 0;
+  width: 100%; height: auto; object-fit: cover;
+  transform: scale(1);            /* empieza full, sin zoom */
+  filter: blur(0);                /* nítida al inicio */
+  transition:
+    transform var(--hero-zoom-duration) ease,
+    filter    var(--hero-zoom-duration) ease,
+    opacity   1s ease;
+  will-change: transform, filter;
+}
+
+.hero .carousel-item.active img{
+  transform: scale(1.04);                 /* zoom-in sutil “cinemático” */
+  filter: blur(var(--hero-blur-max));     /* blur crece hasta ~30% */
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce){
+  .hero .carousel-item img,
+  .hero .carousel-item.active img{
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* CONTENIDO: centrado, alto para dar lugar al CTA */
+.hero .carousel-container{
+  position:absolute; z-index:3;
+  top:40%; left:50%; transform:translate(-50%,-40%);
+  width:min(92%,1000px);
+  text-align:center;
+  padding:2rem 1.25rem 150px;            /* colchón inferior para el CTA */
+  background:none; backdrop-filter:none;
+}
+.hero .carousel-container h2,
+.hero .carousel-container p{ color:#fff !important; }
+.hero .carousel-container h2{
+  font-family: var(--font-primary, "Proxima Nova", system-ui, sans-serif);
+  font-weight:700; font-size:2.6rem; margin-bottom:1.1rem;
+}
+.hero .carousel-container p{
+  font-family: var(--font-secondary, "Roboto", system-ui, sans-serif);
+  font-weight:400; font-size:1.25rem; line-height:1.6;
+  margin:0 auto; max-width:900px;
+}
+
+/* ANIMACIÓN propia (evita la doble animación del template) */
+.hero .carousel-container h2,
+.hero .carousel-container p,
+.hero .carousel-container .btn-get-started{ animation:none !important; transition:none; }
+.hero [data-aos]{ opacity:1 !important; transform:none !important; transition:none !important; }
+
+.hero .carousel-container .rb-anim{ opacity:0; transform:translateY(10px); }
+.hero .carousel-item.active .carousel-container h2.rb-anim{ animation: rbFadeUp .6s ease-out .15s both !important; }
+.hero .carousel-item.active .carousel-container p.rb-anim { animation: rbFadeUp .6s ease-out .35s both !important; }
+
+@keyframes rbFadeUp{
+  from{ opacity:0; transform:translateY(10px); }
+  to  { opacity:1; transform:translateY(0); }
+}
+
+/* CTA FIJO — centrado y entre el texto y los indicadores */
+.hero .hero-fixed-cta{
+  position:absolute; z-index:3;
+  left:45%; transform:translateX(-50%);
+  bottom:50px;                              /* entre texto e indicadores */
+  background:#28830A !important; color:#fff !important;
+  border:none !important; box-shadow:none !important; outline:none !important;
+  padding:.75rem 1.9rem; border-radius:2rem; font-weight:600;
+  transition: background .2s ease;
+}
+.hero .hero-fixed-cta:hover{ background:#1f5e09 !important; }
+
+/* Indicadores centrados */
+#hero-carousel .carousel-indicators{
+  position:absolute; bottom:24px;
+  left:50%; transform:translateX(-50%);
+  right:auto; width:max-content; margin:0;
+  display:flex; justify-content:center; gap:10px;
+  z-index:2;
+}
+#hero-carousel .carousel-indicators [data-bs-target]{ background-color:rgba(255,255,255,.65); }
+#hero-carousel .carousel-indicators .active{ background-color:#fff; }
+
+/* FLECHAS visibles en oscuro */
+.carousel-control-prev .carousel-control-prev-icon,
+.carousel-control-next .carousel-control-next-icon{ filter: invert(1) brightness(2); }
+
+/* ACCESIBILIDAD: sin animaciones si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce){
+  .hero .carousel-item img,
+  .hero .carousel-item.active img{
+    transform:none !important; filter:none !important; transition:none !important;
+  }
+  .hero .carousel-container .rb-anim{ opacity:1; transform:none; animation:none !important; }
+}
+
+/* =================== Responsive =================== */
+
+/* Tablets verticales */
+@media (max-width: 992px){
+  .hero .carousel-container{
+    top:38%; transform:translate(-50%,-38%);
+    padding-bottom:110px;
+  }
+  .hero .carousel-container h2{ font-size:2rem; }
+  .hero .carousel-container p { font-size:1.15rem; line-height:1.5; }
+  .hero .hero-fixed-cta{ bottom:56px; }
+  #hero-carousel .carousel-indicators{ bottom:20px; }
+}
+
+/* Móviles comunes */
+@media (max-width: 576px){
+  #hero, .hero .carousel-item{ min-height:78svh; }     /* garantiza que entre todo */
+  .hero .carousel-container{
+    top:36%; transform:translate(-50%,-36%);
+    padding:1.25rem 1rem 96px; width:92%;
+  }
+  .hero .carousel-container h2{ font-size:1.65rem; line-height:1.2; margin-bottom:.7rem; }
+  .hero .carousel-container p { font-size:1rem; line-height:1.45; max-width:95%; }
+  .hero .hero-fixed-cta{ bottom:48px; padding:.6rem 1.4rem; }
+  #hero-carousel .carousel-indicators{ bottom:14px; gap:8px; }
+  .carousel-control-prev, .carousel-control-next{ width:42px; }
+}
+
+/* Ajuste fino: 360–430px (p.ej. Samsung A51 412×914) */
+@media (max-width: 430px){
+  #hero, .hero .carousel-item{ min-height:86svh; }
+  .hero .carousel-container{
+    top:35.5%; transform:translate(-50%,-35.5%);
+    padding:1rem 1rem 120px; width:92%;
+  }
+  .hero .carousel-container h2{ font-size:1.55rem; }
+  .hero .carousel-container p { font-size:.98rem; line-height:1.42; }
+  .hero .hero-fixed-cta{
+    bottom: calc(64px + env(safe-area-inset-bottom));
+    padding:.6rem 1.4rem;
+  }
+  #hero-carousel .carousel-indicators{
+    bottom: calc(24px + env(safe-area-inset-bottom));
+    left:50%; transform:translateX(-50%); right:auto; width:max-content; margin:0; gap:8px;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 380px){
+  .hero .carousel-container{ top:34%; transform:translate(-50%,-34%); padding-bottom:112px; }
+  .hero .hero-fixed-cta{ bottom: calc(56px + env(safe-area-inset-bottom)); }
+  #hero-carousel .carousel-indicators{ bottom: calc(20px + env(safe-area-inset-bottom)); }
 }

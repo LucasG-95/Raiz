@@ -215,3 +215,44 @@
   document.addEventListener('scroll', navmenuScrollspy);
 
 })();
+// Topbar: aparece al scrollear y EMPUJA el header (no lo tapa)
+(function () {
+  const topbar = document.querySelector('.header .topbar');
+  const header = document.getElementById('header');        // <- selector exacto
+  if (!topbar || !header || !header.classList.contains('sticky-top')) return;
+
+  const THRESHOLD = 120;   // px de scroll para mostrar la topbar
+  let visible = false;
+
+  function setHeaderOffset(px){
+    // offset que usa el CSS: #header.sticky-top { top: var(--header-offset) }
+    document.documentElement.style.setProperty('--header-offset', px + 'px');
+  }
+
+  function showTopbar(show){
+    if (show === visible) return;
+    visible = show;
+
+    if (show){
+      topbar.classList.add('is-visible');
+      const h = topbar.offsetHeight || 40;
+      setHeaderOffset(h);                    // empuja el header
+    }else{
+      topbar.classList.remove('is-visible');
+      setHeaderOffset(0);
+    }
+  }
+
+  function onScroll(){ showTopbar(window.scrollY > THRESHOLD); }
+  function onResize(){
+    if (visible){
+      const h = topbar.offsetHeight || 40;
+      setHeaderOffset(h);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', onResize);
+  onScroll();  // estado inicial
+  onResize();
+})();

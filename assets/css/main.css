@@ -2425,3 +2425,45 @@ button[type="submit"]:focus {
   position: relative;
   z-index: 1;
 }
+/* Botón CTA circular de WhatsApp */
+.call-to-action .cta-whatsapp{
+  width: 88px;
+  height: 88px;
+  border-radius: 9999px;
+  background: #28830A;           /* verde marca */
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(22, 35, 22, .28);
+  transition: transform .18s ease, box-shadow .18s ease, background .2s ease;
+}
+
+.call-to-action .cta-whatsapp i{
+  font-size: 36px;
+  line-height: 1;
+}
+
+/* Hover / focus */
+.call-to-action .cta-whatsapp:hover{
+  background: #1f5e09;
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 14px 32px rgba(22, 35, 22, .34);
+}
+.call-to-action .cta-whatsapp:focus-visible{
+  outline: 3px solid rgba(40,131,10,.45);
+  outline-offset: 3px;
+}
+
+/* Tamaño levemente menor en móvil */
+@media (max-width: 575.98px){
+  .call-to-action .cta-whatsapp{
+    width: 76px;
+    height: 76px;
+  }
+  .call-to-action .cta-whatsapp i{
+    font-size: 32px;
+  }
+}
+.is-hidden{ display:none !important; }

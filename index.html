@@ -655,47 +655,21 @@ Brindamos <strong>asesoramiento práctico y orientado a resultados</strong>, ayu
 
         </div>
       </div>
-      <!-- /Columna de datos de contacto -->
+      <!-- Botón a Google Form (reemplaza TODO el bloque del formulario) -->
+<div class="col-lg-7" data-aos="fade-up" data-aos-delay="200">
+  <a
+    href="https://forms.gle/TU_ID_DE_FORMULARIO"   
+    target="_blank"
+    rel="noopener"
+    class="d-flex align-items-center justify-content-center gap-3 p-4 w-100 rounded-4 text-decoration-none shadow-sm"
+    style="background:#28830A; color:#fff;"
+    aria-label="Envíanos tu consulta personalizada (Formulario de Google)"
+  >
+    <i class="bi bi-clipboard-plus fs-3" aria-hidden="true"></i>
+    <span class="h5 mb-0">Envíanos tu consulta personalizada</span>
+  </a>
+</div>
 
-      <!-- Formulario -->
-      <div class="col-lg-7">
-        <form id="contactForm" class="php-email-form" onsubmit="return sendMailto(event)" data-aos="fade-up" data-aos-delay="200">
-          <div class="row gy-4">
-
-            <div class="col-md-6">
-              <label for="name-field" class="pb-2">Tu nombre</label>
-              <input type="text" name="name" id="name-field" class="form-control" placeholder="Ej.: Ana Pérez" required>
-            </div>
-
-            <div class="col-md-6">
-              <label for="email-field" class="pb-2">Tu email</label>
-              <input type="email" class="form-control" name="email" id="email-field" placeholder="tu@email.com" required>
-            </div>
-
-            <div class="col-md-12">
-              <label for="subject-field" class="pb-2">Asunto</label>
-              <input type="text" class="form-control" name="subject" id="subject-field" placeholder="Consulta desde la web" required>
-            </div>
-
-            <div class="col-md-12">
-              <label for="message-field" class="pb-2">Mensaje</label>
-              <textarea class="form-control" name="message" rows="10" id="message-field" placeholder="Contanos brevemente tu consulta o proyecto..." required></textarea>
-            </div>
-
-            <button
-  type="submit"
-  class="cta-btn submit-btn"
-  formaction="/api/contact"                
-  formmethod="POST"
-  formenctype="application/x-www-form-urlencoded"
-  aria-label="Enviar el formulario de contacto">
-  Enviar mensaje
-</button>
-
-
-          </div>
-        </form>
-      </div>
       <!-- /Formulario -->
 
     </div>

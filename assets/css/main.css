@@ -2457,7 +2457,7 @@ services-list a:hover {
 
 /* Hover / focus */
 .call-to-action .cta-whatsapp:hover {
-  background: #1f5e09;
+  background: #56eb20;
   transform: translateY(-1px) scale(1.04);
   box-shadow: 0 14px 32px rgba(22, 35, 22, .34);
 }
@@ -2550,3 +2550,47 @@ services-list a:hover {
   color: #28830A !important;
 }
 
+/* Fondo con imagen + blur + overlay + degradado inferior */
+#call-to-action {
+  position: relative;
+  overflow: hidden;
+  background: #E8FFA3;   /* color base lima, por si la imagen tarda en cargar */
+}
+
+/* Capa de imagen (blur + overlay) */
+#call-to-action::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  /* RUTA CORREGIDA (desde main.css → subir un nivel y entrar en img/) */
+  background: url("../img/bg-cta.jpg") center/cover no-repeat;
+
+  filter: blur(6px);            /* blur aplicado en mobile y desktop */
+  opacity: 0.9;                /* controla la fuerza de la imagen */
+  mix-blend-mode: color-dodge;      /* estilo “superponer” */
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Capa de degradado (más transparente hacia abajo) */
+#call-to-action::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(232, 255, 163, 0.95) 0%,     /* arriba más sólido */
+    rgba(232, 255, 163, 0.75) 35%,
+    rgba(232, 255, 163, 0.45) 70%,
+    rgba(232, 255, 163, 0.10) 100%    /* abajo casi transparente */
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Contenido por encima de las capas de fondo */
+#call-to-action > .container {
+  position: relative;
+  z-index: 2;
+}
